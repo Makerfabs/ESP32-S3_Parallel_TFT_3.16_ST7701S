@@ -1,0 +1,1 @@
+This routine how reads the data from the QMI8658 and detects the flip to control the image switching.
