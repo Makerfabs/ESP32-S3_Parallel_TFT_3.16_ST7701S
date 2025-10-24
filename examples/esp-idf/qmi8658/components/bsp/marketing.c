@@ -107,7 +107,8 @@ static void display_qmi_task(void *arg)
         }
     }
 
-    while (xTaskGetTickCount() - start_time < ctx->timeout_ticks) {
+    // while (xTaskGetTickCount() - start_time < ctx->timeout_ticks)
+    while (true) {
         if (have_imu) {
             bool ready = false;
             if (qmi8658_is_data_ready(&imu_dev, &ready) == ESP_OK && ready) {
@@ -444,17 +445,16 @@ void marketing_task(void *arg)
     r = xTaskCreate(display_qmi_task, "display_qmi_task", 1024 * 5, _task_ctx, tskIDLE_PRIORITY + 1, &_task_ctx->task);
     if (r != pdPASS) {
         ESP_LOGE(TAG, "failed to create display_qmi_task");
-        vPortFree(_task_ctx);
         goto _exit;
     }
-    deadline = xTaskGetTickCount() + pdMS_TO_TICKS(_task_ctx->timeout_ticks);
-    while(!_task_ctx->is_completed && xTaskGetTickCount() < deadline) {
-        vTaskDelay(pdMS_TO_TICKS(500));
-    }
-    if(!_task_ctx->is_completed && _task_ctx->task != NULL) {
-        vTaskDelete(_task_ctx->task);
-        _task_ctx->task = NULL;
-    }
+    // deadline = xTaskGetTickCount() + pdMS_TO_TICKS(_task_ctx->timeout_ticks);
+    // while(!_task_ctx->is_completed && xTaskGetTickCount() < deadline) {
+    //     vTaskDelay(pdMS_TO_TICKS(500));
+    // }
+    // if(!_task_ctx->is_completed && _task_ctx->task != NULL) {
+    //     vTaskDelete(_task_ctx->task);
+    //     _task_ctx->task = NULL;
+    // }
 #if 0
     vTaskDelay(pdMS_TO_TICKS(500));
 
